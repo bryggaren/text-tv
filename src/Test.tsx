@@ -1,6 +1,5 @@
 import * as React from 'react'
 import * as data from './fonderMock.json';
-import { isNumber } from 'util';
 
 interface IFundInfo {
     company: string | null
@@ -82,6 +81,9 @@ export class Test extends React.Component {
                         fundInfo.funds.push(fundDetail);
                     }
                 }
+            }
+            if (fundInfo.funds.length > 0) {
+                this.allFunds.push(fundInfo)
             }
 
         }

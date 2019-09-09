@@ -1,5 +1,6 @@
 import * as React from 'react'
 import * as data from './fonderMock.json';
+import { isNumber } from 'util';
 
 interface IFundInfo {
     company: string | null
@@ -112,16 +113,26 @@ export class Test extends React.Component {
     }
 
     private getFundNameAndValue (heading: string): Partial<IFundDetail> {
-        let readChar = 'X';
-        let pos = heading.length
-        while (readChar !== ' ' && pos !== 0) {
-            readChar = heading.charAt(pos);
-            pos--
+        let pos = heading.length - 1
+        let value = heading.charAt(pos)
+        while (this.isNumeric(value) && pos >= 0) {
+            value = heading.charAt(--pos) + value;
         }
         return {
-            name: heading.slice(0,pos).trim(),
-            currentValue: Number(heading.slice(pos+2, heading.length))
+            name: heading.slice(0,pos+1).trim(),
+            currentValue: Number(heading.slice(pos+1, heading.length))
         }
     }
+
+    private isNumeric(value: any) {
+        if (value.slice(0,1)===' ') {
+            return false
+        }
+        var count = (value.match(/\./g) || []).length;
+        if (count > 1) {
+            return false;
+        }
+        return !isNaN(parseFloat(value)) && isFinite(value);
+      }
 
 }

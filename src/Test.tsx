@@ -71,7 +71,7 @@ export class Test extends React.Component {
                 const element = root.children[j];
                 if (element.className === "G" && element.innerHTML.trim() !== '') {
                     if (fundInfo.funds.length > 0) {
-                        this.allFunds.push(fundInfo)
+                        this.allFunds=this.addFundInfo(fundInfo, this.allFunds)
                     }
                     fundInfo = new FundInfo(element.innerHTML.trim())
                 }
@@ -83,7 +83,7 @@ export class Test extends React.Component {
                 }
             }
             if (fundInfo.funds.length > 0) {
-                this.allFunds.push(fundInfo)
+                this.allFunds=this.addFundInfo(fundInfo, this.allFunds)
             }
 
         }
@@ -95,6 +95,18 @@ export class Test extends React.Component {
         return (
             <div />
         )
+    }
+
+    private addFundInfo(fundInfo: IFundInfo, fundInfos: IFundInfo[]): IFundInfo[] {
+        const index = fundInfos.findIndex((item)=>{
+            return item.company === fundInfo.company
+        })
+        if (index >= 0) {
+            fundInfos[index].funds = fundInfos[index].funds.concat(fundInfo.funds)
+        } else {
+            fundInfos.push(fundInfo)
+        }
+        return fundInfos
     }
 
     private getFundDetails(elements: Element[]): IFundDetail | null {

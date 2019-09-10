@@ -110,7 +110,7 @@ export class Test extends React.Component {
     }
 
     private getFundDetails(elements: Element[]): IFundDetail | null {
-        const fundHeading = this.getFundNameAndValue(elements[0].innerHTML.trim());
+        const fundHeading = this.getFundNameAndValue(elements[0]);
         const fund = new FundDetail(fundHeading.name!, fundHeading.currentValue!);
 
         for (let index = elements.length -1 ; index > 0; index--) {
@@ -126,7 +126,26 @@ export class Test extends React.Component {
         return fund.yearlyPercentage ? fund : null
     }
 
-    private getFundNameAndValue (heading: string): Partial<IFundDetail> {
+    private getFundNameAndValue (element: Element): Partial<IFundDetail> {
+        const heading = element.innerHTML.trim()
+
+        // Special check for avoiding spans containing <a> elements with the integer part of the value we're looking for
+        const children = element.getElementsByTagName("a")
+        if (children.length > 0) {
+            let pos = heading.length -1
+            let decimals = heading.charAt(pos)
+            while (this.isNumeric(decimals) && pos >= 0) {
+                decimals = heading.charAt(--pos) + decimals;
+            }
+            const value = children[0].innerHTML + decimals.slice(1)    
+            const aPos = heading.indexOf('<')    
+            console.log(heading.slice(0,aPos).trim())
+            return {
+                name: heading.slice(0,aPos).trim(),
+                currentValue: Number(value)
+            }
+        } 
+
         let pos = heading.length - 1
         let value = heading.charAt(pos)
         while (this.isNumeric(value) && pos >= 0) {

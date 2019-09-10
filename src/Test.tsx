@@ -139,7 +139,6 @@ export class Test extends React.Component {
             }
             const value = children[0].innerHTML + decimals.slice(1)    
             const aPos = heading.indexOf('<')    
-            console.log(heading.slice(0,aPos).trim())
             return {
                 name: heading.slice(0,aPos).trim(),
                 currentValue: Number(value)

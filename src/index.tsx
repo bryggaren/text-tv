@@ -5,12 +5,10 @@ import * as serviceWorker from './serviceWorker';
 import MenuAppBar from './components/MenuAppBar';
 import { Main } from './Main';
 import './index.css';
+import { AppLoader } from './AppLoader';
 
 ReactDOM.render(<div>
-    <MemoryRouter>
-<MenuAppBar />
- <Main />    
- </MemoryRouter>
+    <AppLoader />
 </div>, document.getElementById('root'));
 
 // If you want your app to work offline and load faster, you can change

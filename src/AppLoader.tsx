@@ -65,7 +65,7 @@ export class AppLoader extends React.Component {
             <div>
                 <MemoryRouter>
                     <MenuAppBar />
-                    <Main />
+                    <Main funds={this.allFunds}/>
                 </MemoryRouter>
             </div>
         )

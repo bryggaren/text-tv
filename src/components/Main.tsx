@@ -2,14 +2,14 @@ import * as React from 'react'
 import { Switch, Route } from 'react-router-dom'
 import logo from './logo.svg';
 import './App.css';
-import { Revenue, Funds } from '.';
+import { Revenue, FundView } from '.';
 
 export class Main extends React.Component {
     public render() {
         return (
             <Switch>
                 <Route exact path='/' component={Revenue} />
-                <Route path='/funds' component={Funds} />
+                <Route path='/funds' component={FundView} />
             </Switch>
             //     <header className="App-header">
             //     <img src={logo} className="App-logo" alt="logo" />

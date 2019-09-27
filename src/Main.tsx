@@ -2,14 +2,19 @@ import * as React from 'react'
 import { Switch, Route } from 'react-router-dom'
 import logo from './logo.svg';
 import './App.css';
-import { Revenue, Funds } from './components';
+import { Revenue, FundView } from './components';
+import { IFundInfo } from './models';
 
-export class Main extends React.Component {
+export interface IMainProps {
+    funds: IFundInfo[];
+}
+export class Main extends React.Component<IMainProps> {
+
     public render() {
         return (
             <Switch>
                 <Route exact path='/' component={Revenue}/>
-                <Route path='/funds' component={Funds}/>
+                <Route path='/funds' render={(props) => <FundView funds={this.props.funds} />}/>
             </Switch>
         //     <header className="App-header">
         //     <img src={logo} className="App-logo" alt="logo" />

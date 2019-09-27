@@ -1,3 +1,4 @@
 export * from './MenuAppBar';
 export * from './Revenue';
-export * from './Funds';
+export * from './FundView';
+export * from './FundPicker';

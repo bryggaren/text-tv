@@ -1,9 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { MemoryRouter } from 'react-router-dom';
 import * as serviceWorker from './serviceWorker';
-import MenuAppBar from './components/MenuAppBar';
-import { Main } from './Main';
 import './index.css';
 import { AppLoader } from './AppLoader';
 

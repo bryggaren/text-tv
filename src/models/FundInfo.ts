@@ -1,7 +1,7 @@
 import { IFundDetail } from ".";
 
 export interface IFundInfo {
-    company: string | null
+    company: string
     funds: IFundDetail[];
 }
 
@@ -9,7 +9,7 @@ export class FundInfo implements IFundInfo {
     public company: string
     public funds: IFundDetail[];
     constructor(company: string) {
-        this.company= company
-        this.funds= []
+        this.company = company
+        this.funds = []
     }
 }

@@ -7,6 +7,6 @@ export interface IFundViewProps {
 }
 export class FundView extends React.Component<IFundViewProps> {
     public render() {
-        return <FundPicker funds={this.props.funds}/>
+        return <FundPicker allFunds={this.props.funds} onAdd={(c, f) => { console.log(c, f) }} />
     }
 }

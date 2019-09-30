@@ -57,7 +57,14 @@ export class AppLoader extends React.Component {
 
         }
 
-        console.log(this.allFunds)
+        this.allFunds.sort((a, b) => {
+            const x = a.company.toLowerCase();
+            const y = b.company.toLowerCase();
+            if (x < y) { return -1; }
+            if (x > y) { return 1; }
+            return 0;
+
+        })
     }
 
     public render() {
@@ -65,7 +72,7 @@ export class AppLoader extends React.Component {
             <div>
                 <MemoryRouter>
                     <MenuAppBar />
-                    <Main funds={this.allFunds}/>
+                    <Main funds={this.allFunds} />
                 </MemoryRouter>
             </div>
         )
@@ -74,6 +81,13 @@ export class AppLoader extends React.Component {
     private addFundInfo(fundInfo: IFundInfo, fundInfos: IFundInfo[]): IFundInfo[] {
         const index = fundInfos.findIndex((item) => {
             return item.company === fundInfo.company
+        })
+        fundInfo.funds.sort((a, b) => {
+            const x = a.name.toLowerCase();
+            const y = b.name.toLowerCase();
+            if (x < y) { return -1; }
+            if (x > y) { return 1; }
+            return 0;
         })
         if (index >= 0) {
             fundInfos[index].funds = fundInfos[index].funds.concat(fundInfo.funds)

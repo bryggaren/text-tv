@@ -6,13 +6,12 @@ import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
 import Collapse from '@material-ui/core/Collapse';
-import InboxIcon from '@material-ui/icons/MoveToInbox';
-import DraftsIcon from '@material-ui/icons/Drafts';
 import BusinessCenterIcon from '@material-ui/icons/BusinessCenter';
 import LocalAtm from '@material-ui/icons/LocalAtm';
 import ExpandLess from '@material-ui/icons/ExpandLess';
 import ExpandMore from '@material-ui/icons/ExpandMore';
 import { IFundInfo } from '../models';
+import { Button } from '@material-ui/core';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -23,22 +22,48 @@ const useStyles = makeStyles((theme: Theme) =>
     },
     nested: {
       paddingLeft: theme.spacing(4),
-    },
+      color: 'green',
+      '&:hover': {
+        color: 'darkgreen',
+      }
+    }
   }),
 );
 
 export interface IFundPickerProps {
-  funds: IFundInfo[];
+  allFunds: IFundInfo[];
+  onAdd(company: string, fundName: string): void;
 }
 
-export const FundPicker: React.FunctionComponent<IFundPickerProps> = ({ funds }) => {
+export const FundPicker: React.FunctionComponent<IFundPickerProps> = ({ allFunds, onAdd }) => {
   const classes = useStyles();
-  const [open, setOpen] = React.useState(true);
+  const [selectedCompany, setSelectedCompany] = React.useState('');
+  const [hoveredFund, setHoveredFund] = React.useState('');
 
-  const handleClick = () => {
-    console.log(funds);
-    setOpen(!open);
+  const handleClick = (company: string) => {
+    if (selectedCompany === company) {
+      setSelectedCompany('')
+    } else {
+      setSelectedCompany(company);
+    }
   };
+
+  const updateHoveredFund = (name: string) => {
+    setHoveredFund(name);
+  }
+
+  const resetHoveredFund = () => {
+    setHoveredFund('')
+  }
+
+  // const sortByKey = (a: JSX.Element, b: JSX.Element) => {
+  //   console.log('sorting');
+  //   var x = a.key ? a.key.toString().toLowerCase() : 0;
+  //   var y = b.key ? b.key.toString().toLowerCase() : 0;
+  //   if (x < y) { return -1; }
+  //   if (x > y) { return 1; }
+  //   return 0;
+  // }
 
   return (
     <List
@@ -46,40 +71,43 @@ export const FundPicker: React.FunctionComponent<IFundPickerProps> = ({ funds })
       aria-labelledby="nested-list-subheader"
       subheader={
         <ListSubheader component="div" id="nested-list-subheader">
-          Nested List Items
+          Välj fond
         </ListSubheader>
       }
       className={classes.root}
     >
-      <ListItem button>
-        <ListItemIcon>
-          <BusinessCenterIcon />
-        </ListItemIcon>
-        <ListItemText primary="Sent mail" />
-      </ListItem>
-      <ListItem button>
-        <ListItemIcon>
-          <DraftsIcon />
-        </ListItemIcon>
-        <ListItemText primary="Drafts" />
-      </ListItem>
-      <ListItem button onClick={handleClick}>
-        <ListItemIcon>
-          <InboxIcon />
-        </ListItemIcon>
-        <ListItemText primary="Inbox" />
-        {open ? <ExpandLess /> : <ExpandMore />}
-      </ListItem>
-      <Collapse in={open} timeout="auto" unmountOnExit>
-        <List component="div" disablePadding>
-          <ListItem button className={classes.nested}>
-            <ListItemIcon>
-              <LocalAtm />
-            </ListItemIcon>
-            <ListItemText primary="Starred" />
-          </ListItem>
-        </List>
-      </Collapse>
+      {allFunds.map((fundInfo: IFundInfo) => {
+        console.log('render')
+        return (
+          <div key={fundInfo.company}>
+            <ListItem button onClick={() => handleClick(fundInfo.company)}>
+              <ListItemIcon>
+                <BusinessCenterIcon />
+              </ListItemIcon>
+              <ListItemText primary={fundInfo.company} />
+              {selectedCompany === fundInfo.company ? <ExpandLess /> : <ExpandMore />}
+            </ListItem>
+            {fundInfo.funds.map((fund) => {
+              return (
+                <Collapse key={fund.name} in={selectedCompany === fundInfo.company} timeout="auto" unmountOnExit>
+                  <List component="div" disablePadding>
+                    <ListItem button onMouseEnter={() => updateHoveredFund(fund.name)} onMouseLeave={resetHoveredFund} className={classes.nested}>
+                      <ListItemIcon>
+                        <LocalAtm />
+                      </ListItemIcon>
+                      <ListItemText primary={fund.name} />
+
+                      <Button style={{ display: hoveredFund === fund.name ? 'flex' : 'none' }} onClick={() => onAdd(fundInfo.company, fund.name)}>Välj</Button>
+
+                    </ListItem>
+                  </List>
+                </Collapse>
+              )
+            })}
+
+          </div>
+        )
+      })}
     </List>
   );
 }

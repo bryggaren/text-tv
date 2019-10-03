@@ -4,8 +4,7 @@ import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
 import LocalAtm from '@material-ui/icons/LocalAtm';
-import { Button } from '@material-ui/core';
-import { IFundInfo, IFundDetail } from '../../models';
+import { IFundDetail } from '../../models/FundDetails';
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -15,6 +14,9 @@ const useStyles = makeStyles((theme: Theme) =>
             '&:hover': {
                 color: 'darkgreen',
             }
+        },
+        select: {
+            color: theme.palette.text.primary
         }
     }),
 );
@@ -30,14 +32,12 @@ export const FundItem: React.FunctionComponent<IFundItemProps> = ({ fund, hasHov
 
     return (
 
-        <ListItem button className={classes.fund}>
+        <ListItem button className={classes.fund} onClick={() => onAdd(fund.name)}>
             <ListItemIcon>
                 <LocalAtm />
             </ListItemIcon>
             <ListItemText primary={fund.name} />
-
-            <Button style={{ display: hasHover ? 'flex' : 'none' }} onClick={() => onAdd(fund.name)}>Välj</Button>
-
+            <div className={classes.select} style={{ display: hasHover ? 'flex' : 'none' }}>VÄLJ</div>
         </ListItem>
 
 

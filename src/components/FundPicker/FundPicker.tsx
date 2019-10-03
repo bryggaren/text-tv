@@ -22,17 +22,6 @@ export interface IFundPickerProps {
 
 export const FundPicker: React.FunctionComponent<IFundPickerProps> = ({ allFunds, onAddFund }) => {
   const classes = useStyles();
-  // const [selectedCompany, setSelectedCompany] = React.useState('');
-
-
-  // const handleClick = (company: string) => {
-  //   if (selectedCompany === company) {
-  //     setSelectedCompany('')
-  //   } else {
-  //     setSelectedCompany(company);
-  //   }
-  // };
-
 
   return (
     <List
@@ -46,7 +35,6 @@ export const FundPicker: React.FunctionComponent<IFundPickerProps> = ({ allFunds
       className={classes.root}
     >
       {allFunds.map((fundInfo: IFundInfo, index) => {
-        console.log('render')
         return (
           <FundInfoItem key={index} fundInfo={fundInfo} onAddFund={onAddFund} />
         )

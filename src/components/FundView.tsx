@@ -1,12 +1,19 @@
 import * as React from 'react'
 import { IFundInfo } from '../models'
 import { FundPicker } from './FundPicker'
+import { FundTable } from './FundTable'
 
 export interface IFundViewProps {
     funds: IFundInfo[];
 }
 export class FundView extends React.Component<IFundViewProps> {
     public render() {
-        return <FundPicker allFunds={this.props.funds} onAddFund={(c, f) => { console.log(c, f) }} />
+        return (
+            <div style={{ display: 'flex' }}>
+                <FundPicker allFunds={this.props.funds} onAddFund={(c, f) => { console.log(c, f) }} />
+                <FundTable funds={this.props.funds} />
+            </div>
+
+        )
     }
 }

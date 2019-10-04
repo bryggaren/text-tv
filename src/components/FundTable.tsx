@@ -46,7 +46,6 @@ const useStyles = makeStyles((theme: Theme) =>
     createStyles({
         root: {
             width: '100%',
-            overflowX: 'auto',
             borderLeft: '1px solid lightgrey'
         },
         table: {

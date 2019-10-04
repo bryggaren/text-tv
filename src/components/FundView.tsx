@@ -9,7 +9,7 @@ export interface IFundViewProps {
 export class FundView extends React.Component<IFundViewProps> {
     public render() {
         return (
-            <div style={{ display: 'flex' }}>
+            <div style={{ display: 'flex',overflow: 'hidden', maxHeight: '95vh'}}>
                 <FundPicker allFunds={this.props.funds} onAddFund={(c, f) => { console.log(c, f) }} />
                 <FundTable funds={this.props.funds} />
             </div>

@@ -4,6 +4,7 @@ import ListSubheader from '@material-ui/core/ListSubheader';
 import List from '@material-ui/core/List';
 import { IFundInfo } from '../../models';
 import { FundInfoItem } from './FundInfoItem';
+import { Hidden } from '@material-ui/core';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -11,6 +12,8 @@ const useStyles = makeStyles((theme: Theme) =>
       width: '100%',
       maxWidth: 360,
       backgroundColor: theme.palette.background.paper,
+      overflowY: 'scroll',
+      // maxHeight: '90vh'
     },
   }),
 );

@@ -16,7 +16,8 @@ const useStyles = makeStyles((theme: Theme) =>
     },
     appbar: {
       backgroundColor: 'blue',
-      position: 'static'
+      position: 'fixed',
+      height: '5vh'
     },
     title: {
         textAlign: "center",

@@ -14,6 +14,10 @@ const useStyles = makeStyles((theme: Theme) =>
     root: {
       flexGrow: 1,
     },
+    appbar: {
+      backgroundColor: 'blue',
+      position: 'static'
+    },
     title: {
         textAlign: "center",
       flexGrow: 1,
@@ -40,7 +44,7 @@ export default function MenuAppBar() {
 
   return (
     <div className={classes.root}>
-      <AppBar position="static">
+      <AppBar className={classes.appbar} >
         <Toolbar>
           <Typography variant="h6" className={classes.title}>
             Fondkollen

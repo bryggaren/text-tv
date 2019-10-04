@@ -4,7 +4,7 @@ import { MemoryRouter } from 'react-router';
 import { IFundInfo, FundInfo, IFundDetail, FundDetail } from './models';
 import { Main } from './Main';
 import MenuAppBar from './components/MenuAppBar';
-
+import Container from '@material-ui/core/Container';
 export class AppLoader extends React.Component {
 
 
@@ -69,12 +69,12 @@ export class AppLoader extends React.Component {
 
     public render() {
         return (
-            <div>
-                <MemoryRouter>
-                    <MenuAppBar />
+            <MemoryRouter>
+                <MenuAppBar />
+                <Container>
                     <Main funds={this.allFunds} />
-                </MemoryRouter>
-            </div>
+                </Container>
+            </MemoryRouter>
         )
     }
 

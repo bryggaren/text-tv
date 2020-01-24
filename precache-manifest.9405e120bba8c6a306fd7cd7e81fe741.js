@@ -1,10 +1,10 @@
 self.__precacheManifest = (self.__precacheManifest || []).concat([
   {
-    "revision": "350b58b2259678510a4d34ab4736c73e",
+    "revision": "8118454b71859804015514852e6aba30",
     "url": "/text-tv/index.html"
   },
   {
-    "revision": "44fe8a20b07b73bfca22",
+    "revision": "5a3a71623bba1d7a1708",
     "url": "/text-tv/static/css/main.16d98de6.chunk.css"
   },
   {
@@ -16,8 +16,8 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/text-tv/static/js/2.5b7700e1.chunk.js.LICENSE"
   },
   {
-    "revision": "44fe8a20b07b73bfca22",
-    "url": "/text-tv/static/js/main.ad401349.chunk.js"
+    "revision": "5a3a71623bba1d7a1708",
+    "url": "/text-tv/static/js/main.326a4b1b.chunk.js"
   },
   {
     "revision": "0a1d5e997df75fb35359",

@@ -48,8 +48,7 @@ export default function MenuAppBar() {
       <AppBar className={classes.appbar} >
         <Toolbar>
           <Typography variant="h6" className={classes.title}>
-            {/* Fondkollen */}
-            Hej Tyra & Gustav!!!
+            Fondkollen
           </Typography>
           <div>
           <IconButton edge="end" onClick={handleMenu} color="inherit" aria-label="menu">

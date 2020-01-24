@@ -71,7 +71,7 @@ export class AppLoader extends React.Component {
         return (
             <MemoryRouter>
                 <MenuAppBar />
-                <Container style={{marginTop: '5vh'}}>
+                <Container style={{marginTop: 56}}>
                     <Main funds={this.allFunds} />
                 </Container>
             </MemoryRouter>

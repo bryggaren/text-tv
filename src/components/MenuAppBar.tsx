@@ -10,72 +10,84 @@ import Menu from '@material-ui/core/Menu';
 import { NavLink } from 'react-router-dom';
 
 const useStyles = makeStyles((theme: Theme) =>
-  createStyles({
-    root: {
-      flexGrow: 1,
-    },
-    appbar: {
-      backgroundColor: 'blue',
-      position: 'fixed',
-      height: 56
-    },
-    title: {
-        textAlign: "center",
-      flexGrow: 1,
-    },
-    link: {
-        color: "rgba(0, 0, 0, 0.87)",
-        textDecoration: "none",
-    }
-  }),
+    createStyles({
+        root: {
+            flexGrow: 1,
+        },
+        appbar: {
+            backgroundColor: 'blue',
+            position: 'fixed',
+            height: 56,
+        },
+        title: {
+            textAlign: 'center',
+            flexGrow: 1,
+        },
+        link: {
+            color: 'rgba(0, 0, 0, 0.87)',
+            textDecoration: 'none',
+        },
+    }),
 );
 
 export default function MenuAppBar() {
-  const classes = useStyles();
-  const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
-  const open = Boolean(anchorEl);
+    const classes = useStyles();
+    const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
+    const open = Boolean(anchorEl);
 
-  function handleMenu(event: React.MouseEvent<HTMLElement>) {
-    setAnchorEl(event.currentTarget);
-  }
+    function handleMenu(event: React.MouseEvent<HTMLElement>) {
+        setAnchorEl(event.currentTarget);
+    }
 
-  function handleClose() {
-    setAnchorEl(null);
-  }
+    function handleClose() {
+        setAnchorEl(null);
+    }
 
-  return (
-    <div className={classes.root}>
-      <AppBar className={classes.appbar} >
-        <Toolbar>
-          <Typography variant="h6" className={classes.title}>
-            Fondkollen
-          </Typography>
-          <div>
-          <IconButton edge="end" onClick={handleMenu} color="inherit" aria-label="menu">
-            <MenuIcon />
-          </IconButton>
-          <Menu
-                id="menu-appbar"
-                anchorEl={anchorEl}
-                anchorOrigin={{
-                  vertical: 'top',
-                  horizontal: 'right',
-                }}
-                keepMounted
-                transformOrigin={{
-                  vertical: 'top',
-                  horizontal: 'right',
-                }}
-                open={open}
-                onClose={handleClose}
-              >
-                <MenuItem onClick={handleClose}>
-                <NavLink className={classes.link} to={'/funds'}>Mina Fonder...</NavLink>
-                </MenuItem>
-              </Menu>
-          </div>
-        </Toolbar>
-      </AppBar>
-    </div>
-  );
+    return (
+        <div className={classes.root}>
+            <AppBar className={classes.appbar}>
+                <Toolbar>
+                    <Typography variant="h6" className={classes.title}>
+                        Fondkollen
+                    </Typography>
+                    <div>
+                        <IconButton
+                            edge="end"
+                            onClick={handleMenu}
+                            color="inherit"
+                            aria-label="menu"
+                        >
+                            <MenuIcon />
+                        </IconButton>
+                        <Menu
+                            id="menu-appbar"
+                            anchorEl={anchorEl}
+                            anchorOrigin={{
+                                vertical: 'top',
+                                horizontal: 'right',
+                            }}
+                            keepMounted
+                            transformOrigin={{
+                                vertical: 'top',
+                                horizontal: 'right',
+                            }}
+                            open={open}
+                            onClose={handleClose}
+                        >
+                            <MenuItem onClick={handleClose}>
+                                <NavLink className={classes.link} to={'/funds'}>
+                                    Välj Fonder...
+                                </NavLink>
+                            </MenuItem>
+                            <MenuItem onClick={handleClose}>
+                                <NavLink className={classes.link} to={'/holdings'}>
+                                    Mitt Innehav...
+                                </NavLink>
+                            </MenuItem>
+                        </Menu>
+                    </div>
+                </Toolbar>
+            </AppBar>
+        </div>
+    );
 }

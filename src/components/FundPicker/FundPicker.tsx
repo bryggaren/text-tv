@@ -7,41 +7,38 @@ import { FundInfoItem } from './FundInfoItem';
 import { Hidden } from '@material-ui/core';
 
 const useStyles = makeStyles((theme: Theme) =>
-  createStyles({
-    root: {
-      width: '100%',
-      maxWidth: 360,
-      backgroundColor: theme.palette.background.paper,
-      overflowY: 'scroll',
-      // maxHeight: '90vh'
-    },
-  }),
+    createStyles({
+        root: {
+            width: '100%',
+            maxWidth: 360,
+            backgroundColor: theme.palette.background.paper,
+            overflowY: 'scroll',
+        },
+    }),
 );
 
 export interface IFundPickerProps {
-  allFunds: IFundInfo[];
-  onAddFund(company: string, fundName: string): void;
+    allFunds: IFundInfo[];
+    onAddFund(company: string, fundName: string): void;
 }
 
 export const FundPicker: React.FunctionComponent<IFundPickerProps> = ({ allFunds, onAddFund }) => {
-  const classes = useStyles();
+    const classes = useStyles();
 
-  return (
-    <List
-      component="nav"
-      aria-labelledby="nested-list-subheader"
-      subheader={
-        <ListSubheader component="div" id="nested-list-subheader">
-          Välj fond
-        </ListSubheader>
-      }
-      className={classes.root}
-    >
-      {allFunds.map((fundInfo: IFundInfo, index) => {
-        return (
-          <FundInfoItem key={index} fundInfo={fundInfo} onAddFund={onAddFund} />
-        )
-      })}
-    </List>
-  );
-}
+    return (
+        <List
+            component="nav"
+            aria-labelledby="nested-list-subheader"
+            subheader={
+                <ListSubheader component="div" id="nested-list-subheader">
+                    Välj fond
+                </ListSubheader>
+            }
+            className={classes.root}
+        >
+            {allFunds.map((fundInfo: IFundInfo, index) => {
+                return <FundInfoItem key={index} fundInfo={fundInfo} onAddFund={onAddFund} />;
+            })}
+        </List>
+    );
+};

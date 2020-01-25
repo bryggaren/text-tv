@@ -12,12 +12,17 @@ import { FundItem } from './FundItem';
 
 export interface IFundInfoItemProps {
     fundInfo: IFundInfo;
+    showExpanded?: boolean;
     onAddFund(compmany: string, fundName: string): void;
 }
 
-export const FundInfoItem: React.FunctionComponent<IFundInfoItemProps> = ({ fundInfo, onAddFund }) => {
+export const FundInfoItem: React.FunctionComponent<IFundInfoItemProps> = ({
+    fundInfo,
+    showExpanded,
+    onAddFund,
+}) => {
     const [hoveredFund, setHoveredFund] = React.useState('');
-    const [open, setOpen] = React.useState(false);
+    const [open, setOpen] = React.useState(showExpanded);
 
     const handleClick = () => {
         setOpen(!open);
@@ -25,17 +30,16 @@ export const FundInfoItem: React.FunctionComponent<IFundInfoItemProps> = ({ fund
 
     const updateHoveredFund = (name: string) => {
         setHoveredFund(name);
-    }
+    };
 
     const resetHoveredFund = () => {
-        setHoveredFund('')
-    }
+        setHoveredFund('');
+    };
 
     const onAdd = (fundName: string) => {
-        onAddFund(fundInfo.company, fundName)
-    }
+        onAddFund(fundInfo.company, fundName);
+    };
     return (
-
         <div key={fundInfo.company}>
             <ListItem button onClick={handleClick}>
                 <ListItemIcon>
@@ -48,16 +52,20 @@ export const FundInfoItem: React.FunctionComponent<IFundInfoItemProps> = ({ fund
                 return (
                     <Collapse key={fund.name} in={open} timeout="auto" unmountOnExit>
                         <List component="div" disablePadding>
-                            <div onMouseEnter={() => updateHoveredFund(fund.name)} onMouseLeave={resetHoveredFund}>
-                                <FundItem fund={fund} hasHover={fund.name === hoveredFund} onAdd={onAdd} />
+                            <div
+                                onMouseEnter={() => updateHoveredFund(fund.name)}
+                                onMouseLeave={resetHoveredFund}
+                            >
+                                <FundItem
+                                    fund={fund}
+                                    hasHover={fund.name === hoveredFund}
+                                    onAdd={onAdd}
+                                />
                             </div>
                         </List>
                     </Collapse>
-                )
+                );
             })}
-
         </div>
-
-
     );
-}
+};

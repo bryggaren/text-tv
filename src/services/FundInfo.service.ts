@@ -1,27 +1,35 @@
 import { IFundDetail, IFundRecord } from '../models';
 import { KeyValueStore, IItems } from '../utils';
 
+const Company_Fund_Separator = '#/#/#';
 class FundInfoService {
-    private fundStore = new KeyValueStore<IFundRecord>('fondkollen', 'fundInfo');
+    private fundStore = new KeyValueStore<number>('fondkollen', 'fundInfo');
     public async AddFund(fundRecord: IFundRecord): Promise<void> {
-        const funds = await this.getFunds();
+        const newFundKey = fundRecord.company.concat(Company_Fund_Separator, fundRecord.name);
+        const existingFund = (await this.fundStore.getItem(newFundKey)) !== undefined;
 
-        return this.fundStore.setItem(fundRecord.company, fundRecord);
+        if (existingFund) {
+            alert('Denna fonden finns redan bland dina fonder!');
+        } else {
+            this.fundStore.setItem(newFundKey, fundRecord.shares || 0);
+        }
     }
 
-    public isExisting(fund: IFundDetail): boolean {
-        return true;
-    }
-
-    private async getFunds() {
+    public async getFunds(): Promise<IFundRecord[]> {
         const keys = await this.fundStore.getItems();
-
         const funds: IFundRecord[] = [];
         for (const key in keys) {
-            funds.push(await this.fundStore.getItem(key));
+            const fund = this.SplitCompanyFund(key);
+            fund.shares = await this.fundStore.getItem(key);
+            funds.push(fund);
         }
-
+        console.log(funds);
         return funds;
+    }
+
+    private SplitCompanyFund(key: string): IFundRecord {
+        const info = key.split(Company_Fund_Separator);
+        return { company: info[0], name: info[1] };
     }
 }
 

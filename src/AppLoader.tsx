@@ -1,7 +1,7 @@
 import * as React from 'react';
 import * as data from './fonderMock.json';
 import { MemoryRouter } from 'react-router';
-import { IFundInfo, FundInfo, IFundDetail, FundDetail, IFundRecord } from './models';
+import { IFundInfo, FundInfo, IFundDetail, FundDetail, IHoldingRecord } from './models';
 import { Main } from './Main';
 import MenuAppBar from './components/MenuAppBar';
 import Container from '@material-ui/core/Container';

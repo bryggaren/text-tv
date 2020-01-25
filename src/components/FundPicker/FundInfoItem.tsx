@@ -12,17 +12,15 @@ import { FundItem } from './FundItem';
 
 export interface IFundInfoItemProps {
     fundInfo: IFundInfo;
-    showExpanded?: boolean;
     onAddFund(compmany: string, fundName: string): void;
 }
 
 export const FundInfoItem: React.FunctionComponent<IFundInfoItemProps> = ({
     fundInfo,
-    showExpanded,
     onAddFund,
 }) => {
     const [hoveredFund, setHoveredFund] = React.useState('');
-    const [open, setOpen] = React.useState(showExpanded);
+    const [open, setOpen] = React.useState(false);
 
     const handleClick = () => {
         setOpen(!open);

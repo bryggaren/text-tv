@@ -1,4 +1,4 @@
-export interface IFundRecord {
+export interface IHoldingRecord {
     company: string;
     name: string;
     shares?: number;

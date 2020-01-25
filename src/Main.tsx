@@ -9,6 +9,8 @@ export interface IMainProps {
     funds: IFundInfo[];
 }
 export class Main extends React.Component<IMainProps> {
+    // Get data from indexed db in componentDidUpdate or something!!!
+
     public render() {
         return (
             <Switch>

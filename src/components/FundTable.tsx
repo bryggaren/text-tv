@@ -6,7 +6,7 @@ import TableCell from '@material-ui/core/TableCell';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import Paper from '@material-ui/core/Paper';
-import { IFundInfo } from '../models';
+import { IFundInfo, IHoldingRecord } from '../models';
 import { IconButton, List } from '@material-ui/core';
 import DeleteIcon from '@material-ui/icons/Delete';
 import { FundPicker } from './FundPicker';
@@ -23,24 +23,29 @@ const useStyles = makeStyles((theme: Theme) =>
 );
 
 export interface IFundTableProps {
-    funds: IFundInfo[];
+    funds: IHoldingRecord[];
 }
 
 export class FundTable extends React.Component<IFundTableProps> {
-    const classes = useStyles();
     public render() {
         return (
             <div style={{ display: 'flex', overflow: 'hidden' }}>
-                <List style={{width: '100%',maxWidth: 360, backgroundColor: 'white', overflowY: 'scroll'}}
-            component="nav"
-            aria-labelledby="nested-list-subheader"
-
-            className={classes.root}
-        >
-            {allFunds.map((fundInfo: IFundInfo, index) => {
-                return <FundInfoItem key={index} fundInfo={fundInfo} onAddFund={onAddFund} />;
-            })}
-        </List>
+                <List
+                    style={{
+                        width: '100%',
+                        maxWidth: 360,
+                        backgroundColor: 'white',
+                        overflowY: 'scroll',
+                    }}
+                    component="nav"
+                    aria-labelledby="nested-list-subheader"
+                >
+                    {allFunds.map((fundInfo: IFundInfo, index) => {
+                        return (
+                            <FundInfoItem key={index} fundInfo={fundInfo} onAddFund={onAddFund} />
+                        );
+                    })}
+                </List>
             </div>
         );
     }

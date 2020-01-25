@@ -1,25 +1,28 @@
-import { IFundDetail } from '../models';
-import { KeyValueStore } from '../utils';
+import { IFundDetail, IFundRecord } from '../models';
+import { KeyValueStore, IItems } from '../utils';
 
 class FundInfoService {
+    private fundStore = new KeyValueStore<IFundRecord>('fondkollen', 'fundInfo');
+    public async AddFund(fundRecord: IFundRecord): Promise<void> {
+        const funds = await this.getFunds();
 
-    private fundStore = new KeyValueStore<string | undefined>(
-        'fondkollen',
-        'fundInfo',
-    );
-    public AddFund(company: string, fund: string): Promise<void>  {
-        return Promise.resolve(localStorage.setItem(company,fund))
-        // return this.fundStore.setItem(company,fund)
+        return this.fundStore.setItem(fundRecord.company, fundRecord);
     }
 
     public isExisting(fund: IFundDetail): boolean {
         return true;
     }
 
-    private getFunds(): IFundDetail[] {
-        return [];
-    }
+    private async getFunds() {
+        const keys = await this.fundStore.getItems();
 
+        const funds: IFundRecord[] = [];
+        for (const key in keys) {
+            funds.push(await this.fundStore.getItem(key));
+        }
+
+        return funds;
+    }
 }
 
 export const fundInfoService = new FundInfoService();

@@ -1,10 +1,10 @@
-import { IFundDetail, IHoldingRecord } from '../models';
+import { IFundDetail, IFundRecord } from '../models';
 import { KeyValueStore, IItems } from '../utils';
 
 const Company_Fund_Separator = '#/#/#';
 class FundInfoService {
     private fundStore = new KeyValueStore<number>('fondkollen', 'fundInfo');
-    public async AddFund(fundRecord: IHoldingRecord): Promise<void> {
+    public async AddFund(fundRecord: IFundRecord): Promise<void> {
         const newFundKey = fundRecord.company.concat(Company_Fund_Separator, fundRecord.name);
         const existingFund = (await this.fundStore.getItem(newFundKey)) !== undefined;
 
@@ -15,9 +15,9 @@ class FundInfoService {
         }
     }
 
-    public async getFunds(): Promise<IHoldingRecord[]> {
+    public async getFunds(): Promise<IFundRecord[]> {
         const keys = await this.fundStore.getItems();
-        const funds: IHoldingRecord[] = [];
+        const funds: IFundRecord[] = [];
         for (const key in keys) {
             const fund = this.SplitCompanyFund(key);
             fund.shares = await this.fundStore.getItem(key);
@@ -27,7 +27,7 @@ class FundInfoService {
         return funds;
     }
 
-    private SplitCompanyFund(key: string): IHoldingRecord {
+    private SplitCompanyFund(key: string): IFundRecord {
         const info = key.split(Company_Fund_Separator);
         return { company: info[0], name: info[1] };
     }

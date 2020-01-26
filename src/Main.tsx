@@ -16,10 +16,7 @@ export class Main extends React.Component<IMainProps> {
             <Switch>
                 <Route exact path="/" component={Revenue} />
                 <Route path="/funds" render={(props) => <FundView funds={this.props.funds} />} />
-                <Route
-                    path="/holdings"
-                    render={(props) => <FundTable funds={this.props.funds} />}
-                />
+                <Route path="/holdings" render={(props) => <FundTable />} />
             </Switch>
         );
     }

@@ -10,36 +10,24 @@ const useStyles = makeStyles((theme: Theme) =>
     createStyles({
         fund: {
             paddingLeft: theme.spacing(4),
-            color: 'green',
-            '&:hover': {
-                color: 'darkgreen',
-            }
         },
-        select: {
-            color: theme.palette.text.primary
-        }
     }),
 );
 
 export interface IFundItemProps {
     fund: IFundDetail;
-    hasHover: boolean
     onAdd(fundName: string): void;
 }
 
-export const FundItem: React.FunctionComponent<IFundItemProps> = ({ fund, hasHover, onAdd }) => {
+export const FundItem: React.FunctionComponent<IFundItemProps> = ({ fund, onAdd }) => {
     const classes = useStyles();
 
     return (
-
         <ListItem button className={classes.fund} onClick={() => onAdd(fund.name)}>
             <ListItemIcon>
                 <LocalAtm />
             </ListItemIcon>
             <ListItemText primary={fund.name} />
-            <div className={classes.select} style={{ display: hasHover ? 'flex' : 'none' }}>VÄLJ</div>
         </ListItem>
-
-
     );
-}
+};

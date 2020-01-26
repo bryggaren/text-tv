@@ -39,7 +39,7 @@ export const FundInfoItem: React.FunctionComponent<IFundInfoItemProps> = ({
     };
     return (
         <div key={fundInfo.company}>
-            <ListItem button onClick={handleClick}>
+            <ListItem style={{ color: 'green' }} button onClick={handleClick}>
                 <ListItemIcon>
                     <BusinessCenterIcon />
                 </ListItemIcon>
@@ -50,16 +50,7 @@ export const FundInfoItem: React.FunctionComponent<IFundInfoItemProps> = ({
                 return (
                     <Collapse key={fund.name} in={open} timeout="auto" unmountOnExit>
                         <List component="div" disablePadding>
-                            <div
-                                onMouseEnter={() => updateHoveredFund(fund.name)}
-                                onMouseLeave={resetHoveredFund}
-                            >
-                                <FundItem
-                                    fund={fund}
-                                    hasHover={fund.name === hoveredFund}
-                                    onAdd={onAdd}
-                                />
-                            </div>
+                            <FundItem fund={fund} onAdd={onAdd} />
                         </List>
                     </Collapse>
                 );

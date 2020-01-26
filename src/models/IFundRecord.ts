@@ -1,6 +1,6 @@
 export interface IFundRecord {
     company: string;
-    holdingInfo: IFundHoldings;
+    holdingInfo: IFundHoldings[];
 }
 
 export interface IFundHoldings {

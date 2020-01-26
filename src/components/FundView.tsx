@@ -16,6 +16,6 @@ export class FundView extends React.Component<IFundViewProps> {
     }
 
     private async addFund(company: string, name: string) {
-        await fundInfoService.AddFund(company, name);
+        await fundInfoService.addFund(company, name);
     }
 }

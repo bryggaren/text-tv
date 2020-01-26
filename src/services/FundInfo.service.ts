@@ -4,7 +4,7 @@ import { KeyValueStore, IItems } from '../utils';
 const Company_Fund_Separator = '#/#/#';
 class FundInfoService {
     private fundStore = new KeyValueStore<number>('fondkollen', 'fundInfo');
-    public async AddFund(company: string, name: string): Promise<void> {
+    public async addFund(company: string, name: string): Promise<void> {
         const newFundKey = company.concat(Company_Fund_Separator, name);
         const existingFund = (await this.fundStore.getItem(newFundKey)) !== undefined;
 
@@ -13,6 +13,11 @@ class FundInfoService {
         } else {
             this.fundStore.setItem(newFundKey, 0);
         }
+    }
+
+    public async deleteFund(company: string, name: string) {
+        const key = company.concat(Company_Fund_Separator, name);
+        await this.fundStore.removeItem(key);
     }
 
     public async getFunds(): Promise<IFundRecord[]> {

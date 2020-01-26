@@ -1,16 +1,9 @@
 import React from 'react';
 import { IFundRecord } from '../models';
-import {
-    List,
-    ListItem,
-    ListItemIcon,
-    ListItemText,
-    TextField,
-    IconButton,
-} from '@material-ui/core';
-import DeleteIcon from '@material-ui/icons/Delete';
+import { List, ListItem, ListItemText } from '@material-ui/core';
+
 import { fundInfoService } from '../services';
-import BusinessCenterIcon from '@material-ui/icons/BusinessCenter';
+import { FundHoldingItem } from './FundHolding/FundHoldingItem';
 
 export interface IFundTableState {
     funds: IFundRecord[];
@@ -26,12 +19,6 @@ export class FundTable extends React.Component<{}, IFundTableState> {
     public async componentDidMount() {
         const data = await fundInfoService.getFunds();
         this.setState({ funds: data });
-        // console.log('Data', data);
-
-        // fundInfoService.getFunds().then((data) => {
-        //     this.setState({ funds: data });
-        //     console.log('Data', data);
-        // });
     }
 
     public render() {
@@ -61,32 +48,32 @@ export class FundTable extends React.Component<{}, IFundTableState> {
                 <ListItem style={{ color: 'green' }}>
                     <ListItemText primary={fund.company} />
                 </ListItem>
-                {fund.holdingInfo.map((holding) => {
+                {fund.holdingInfo.map((item) => {
                     return (
-                        <ListItem button style={{ marginLeft: 4 }} key={holding.fundName}>
-                            <ListItemText primary={holding.fundName} />
-                            <TextField
-                                style={{ maxWidth: 80 }}
-                                label="Andelar"
-                                variant="outlined"
-                                type="number"
-                                InputLabelProps={{
-                                    shrink: true,
-                                }}
-                            />
-                            {/* <ListItemSecondaryAction> */}
-                            <IconButton edge="end" aria-label="delete fund">
-                                <DeleteIcon />
-                            </IconButton>
-                            {/* </ListItemSecondaryAction> */}
-                        </ListItem>
+                        <FundHoldingItem
+                            key={item.fundName}
+                            company={fund.company}
+                            fundName={item.fundName}
+                            holdings={item.shares || 0}
+                            onDelete={this.onDeleteFund}
+                            onHoldingsChange={() => {}}
+                        />
                     );
                 })}
             </div>
         );
     }
 
-    private async addFund(company: string, fundName: string) {
-        // await fundInfoService.AddFund({company: company, name: fundName, shares: 0})
+    private onDeleteFund = (company: string, fund: string) => {
+        fundInfoService.deleteFund(company, fund).then(() => {
+            this.updateFunds();
+        });
+    };
+
+    private async updateFunds() {
+        const data = await fundInfoService.getFunds();
+        this.setState({
+            funds: data,
+        });
     }
 }

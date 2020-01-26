@@ -20,6 +20,11 @@ class FundInfoService {
         await this.fundStore.removeItem(key);
     }
 
+    public async changeHoldings(company: string, name: string, holdings: number) {
+        const key = company.concat(Company_Fund_Separator, name);
+        await this.fundStore.removeItem(key);
+        await this.fundStore.setItem(key, holdings);
+    }
     public async getFunds(): Promise<IFundRecord[]> {
         const keys = await this.fundStore.getItems();
         const funds: IFundRecord[] = [];

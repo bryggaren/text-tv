@@ -55,8 +55,8 @@ export class FundTable extends React.Component<{}, IFundTableState> {
                             company={fund.company}
                             fundName={item.fundName}
                             holdings={item.shares || 0}
-                            onDelete={this.onDeleteFund}
-                            onHoldingsChange={() => {}}
+                            onDelete={this.deleteFund}
+                            onHoldingsChange={this.changeHoldings}
                         />
                     );
                 })}
@@ -64,8 +64,14 @@ export class FundTable extends React.Component<{}, IFundTableState> {
         );
     }
 
-    private onDeleteFund = (company: string, fund: string) => {
+    private deleteFund = (company: string, fund: string) => {
         fundInfoService.deleteFund(company, fund).then(() => {
+            this.updateFunds();
+        });
+    };
+
+    private changeHoldings = (company: string, fund: string, holdings: number) => {
+        fundInfoService.changeHoldings(company, fund, holdings).then(() => {
             this.updateFunds();
         });
     };

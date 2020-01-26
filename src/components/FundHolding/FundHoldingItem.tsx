@@ -7,10 +7,21 @@ export interface IFundHoldingProps {
     fundName: string;
     holdings: number;
     onDelete(company: string, fundName: string): void;
-    onHoldingsChange(): void;
+    onHoldingsChange(company: string, fund: string, holdings: number): void;
 }
 
-export class FundHoldingItem extends React.Component<IFundHoldingProps> {
+interface IFundHoldingState {
+    internalHoldings: number;
+}
+
+export class FundHoldingItem extends React.Component<IFundHoldingProps, IFundHoldingState> {
+    constructor(props: IFundHoldingProps) {
+        super(props);
+        this.state = {
+            internalHoldings: this.props.holdings,
+        };
+    }
+
     public render() {
         return (
             <ListItem button style={{ marginLeft: 4 }}>
@@ -23,7 +34,12 @@ export class FundHoldingItem extends React.Component<IFundHoldingProps> {
                     InputLabelProps={{
                         shrink: true,
                     }}
-                    value={this.props.holdings}
+                    value={this.state.internalHoldings}
+                    onChange={(event) => {
+                        const { value } = event.target;
+                        this.setState({ internalHoldings: Number(value) });
+                    }}
+                    onBlur={this.onHoldingsBlur}
                 />
                 <IconButton edge="end" aria-label="delete fund" onClick={this.onDelete}>
                     <DeleteIcon />
@@ -34,5 +50,13 @@ export class FundHoldingItem extends React.Component<IFundHoldingProps> {
 
     private onDelete = () => {
         this.props.onDelete(this.props.company, this.props.fundName);
+    };
+
+    private onHoldingsBlur = () => {
+        this.props.onHoldingsChange(
+            this.props.company,
+            this.props.fundName,
+            this.state.internalHoldings,
+        );
     };
 }

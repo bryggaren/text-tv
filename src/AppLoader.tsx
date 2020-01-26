@@ -76,7 +76,6 @@ export class AppLoader extends React.Component {
     }
 
     public render() {
-        console.log('apploader');
         return (
             <MemoryRouter>
                 <MenuAppBar />

@@ -4,7 +4,6 @@ import ListSubheader from '@material-ui/core/ListSubheader';
 import List from '@material-ui/core/List';
 import { IFundInfo } from '../../models';
 import { FundInfoItem } from './FundInfoItem';
-import { Hidden } from '@material-ui/core';
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -31,7 +30,7 @@ export const FundPicker: React.FunctionComponent<IFundPickerProps> = ({ allFunds
             aria-labelledby="nested-list-subheader"
             subheader={
                 <ListSubheader component="div" id="nested-list-subheader">
-                    Välj fond
+                    Välj Fonder
                 </ListSubheader>
             }
             className={classes.root}

@@ -1,15 +1,16 @@
-import { IFundDetail } from ".";
+import { IFundDetail } from '.';
+import { IFundRecord } from './IFundRecord';
 
 export interface IFundInfo {
-    company: string
+    company: string;
     funds: IFundDetail[];
 }
 
 export class FundInfo implements IFundInfo {
-    public company: string
+    public company: string;
     public funds: IFundDetail[];
     constructor(company: string) {
-        this.company = company
-        this.funds = []
+        this.company = company;
+        this.funds = [];
     }
 }

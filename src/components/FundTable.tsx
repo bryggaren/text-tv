@@ -1,12 +1,32 @@
 import React from 'react';
 import { IFundRecord } from '../models';
-import { List } from '@material-ui/core';
+import { List, ListItem, ListItemIcon, ListItemText } from '@material-ui/core';
+import DeleteIcon from '@material-ui/icons/Delete';
+import { fundInfoService } from '../services';
+import BusinessCenterIcon from '@material-ui/icons/BusinessCenter';
 
-export interface IFundTableProps {
-    // funds: IFundRecord[];
+export interface IFundTableState {
+    funds: IFundRecord[];
 }
 
-export class FundTable extends React.Component<IFundTableProps> {
+export class FundTable extends React.Component<{}, IFundTableState> {
+    constructor(props: any) {
+        super(props);
+        this.state = {
+            funds: [],
+        };
+    }
+    public async componentDidMount() {
+        const data = await fundInfoService.getFunds();
+        this.setState({ funds: data });
+        // console.log('Data', data);
+
+        // fundInfoService.getFunds().then((data) => {
+        //     this.setState({ funds: data });
+        //     console.log('Data', data);
+        // });
+    }
+
     public render() {
         return (
             <div style={{ display: 'flex', overflow: 'hidden' }}>
@@ -20,6 +40,16 @@ export class FundTable extends React.Component<IFundTableProps> {
                     component="nav"
                     aria-labelledby="nested-list-subheader"
                 >
+                    {this.state.funds.map((fund) => {
+                        return (
+                            <ListItem>
+                                <ListItemIcon>
+                                    <BusinessCenterIcon />
+                                </ListItemIcon>
+                                <ListItemText primary={fund.company} />
+                            </ListItem>
+                        );
+                    })}
                     {/* {allFunds.map((fundInfo: IFundInfo, index) => {
                         return (
                             <FundInfoItem key={index} fundInfo={fundInfo} onAddFund={onAddFund} />

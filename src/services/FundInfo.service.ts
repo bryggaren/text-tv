@@ -1,9 +1,17 @@
 import { KeyValueStore, IItems } from '../utils';
 import { textTvCommunicator } from '../communicators';
-import { FundInfo, IFundInfo, IFundDetail, FundDetail } from '../models';
+import {
+    FundInfo,
+    IFundInfo,
+    IFundDetail,
+    FundDetail,
+    IFundInfoRecord,
+    FundInfoRecord,
+} from '../models';
+import { fundRecordService } from './FundRecord.service';
 
 class FundInfoService {
-    private fundStore = new KeyValueStore<number>('fondkollen', 'fundInfo');
+    private fundStore = new KeyValueStore<IFundInfoRecord[]>('fondkollen', 'fundInfo');
 
     public async getFundInfo(): Promise<IFundInfo[]> {
         let allFunds: IFundInfo[] = [];
@@ -69,7 +77,39 @@ class FundInfoService {
             return 0;
         });
 
+        this.addFundInfoToStorage(allFunds);
+
         return allFunds;
+    }
+
+    private async addFundInfoToStorage(allFunds: IFundInfo[]) {
+        const userFunds = await fundRecordService.getFunds();
+        let fundInfoRecords: IFundInfoRecord[] = [];
+        userFunds.map((record) => {
+            const companyItem = allFunds.find((item) => item.company === record.company);
+            if (companyItem) {
+                record.holdingInfo.map((holding) => {
+                    const fundDetail = companyItem.funds.find(
+                        (fund) => fund.name === holding.fundName,
+                    );
+                    if (fundDetail) {
+                        fundInfoRecords.push(new FundInfoRecord(companyItem.company, fundDetail));
+                    }
+                });
+            }
+        });
+        // If after kl 18:30 set next bankday with slutkurser (Current)
+        const time = new Date().toLocaleTimeString('sv-se');
+        if (time > '18:30') {
+            await this.fundStore.setItem(
+                new Date('Bankday').toLocaleDateString('sv-se'),
+                fundInfoRecords,
+            );
+        }
+
+        // Justera kurserna på dagens datum och spara
+        const date = new Date().toLocaleDateString('sv-se');
+        await this.fundStore.setItem(new Date().toLocaleDateString('sv-se'), fundInfoRecords);
     }
 
     private addFundInfo(fundInfo: IFundInfo, fundInfos: IFundInfo[]): IFundInfo[] {

@@ -93,7 +93,12 @@ class FundInfoService {
                         (fund) => fund.name === holding.fundName,
                     );
                     if (fundDetail) {
-                        fundInfoRecords.push(new FundInfoRecord(companyItem.company, fundDetail));
+                        fundInfoRecords.push(
+                            new FundInfoRecord(companyItem.company, {
+                                ...fundDetail,
+                                holdings: holding.holdings,
+                            }),
+                        );
                     }
                 });
             }

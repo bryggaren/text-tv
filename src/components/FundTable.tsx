@@ -54,7 +54,7 @@ export class FundTable extends React.Component<{}, IFundTableState> {
                             key={item.fundName}
                             company={fund.company}
                             fundName={item.fundName}
-                            holdings={item.shares || 0}
+                            holdings={item.holdings || 0}
                             onDelete={this.deleteFund}
                             onHoldingsChange={this.changeHoldings}
                         />

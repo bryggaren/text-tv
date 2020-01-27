@@ -65,7 +65,7 @@ class FundRecordService {
 
     private createFundRecord(key: string, value: number): IFundRecord {
         const info = key.split(Company_Fund_Separator);
-        return { company: info[0], holdingInfo: [{ fundName: info[1], shares: value }] };
+        return { company: info[0], holdingInfo: [{ fundName: info[1], holdings: value }] };
     }
 }
 

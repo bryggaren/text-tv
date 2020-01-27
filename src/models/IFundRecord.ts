@@ -5,5 +5,5 @@ export interface IFundRecord {
 
 export interface IFundHoldings {
     fundName: string;
-    shares?: number;
+    holdings: number;
 }

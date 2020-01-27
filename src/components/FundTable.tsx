@@ -2,7 +2,7 @@ import React from 'react';
 import { IFundRecord } from '../models';
 import { List, ListItem, ListItemText } from '@material-ui/core';
 
-import { fundInfoService } from '../services';
+import { fundRecordService } from '../services';
 import { FundHoldingItem } from './FundHolding/FundHoldingItem';
 
 export interface IFundTableState {
@@ -17,7 +17,7 @@ export class FundTable extends React.Component<{}, IFundTableState> {
         };
     }
     public async componentDidMount() {
-        const data = await fundInfoService.getFunds();
+        const data = await fundRecordService.getFunds();
         this.setState({ funds: data });
     }
 
@@ -65,19 +65,19 @@ export class FundTable extends React.Component<{}, IFundTableState> {
     }
 
     private deleteFund = (company: string, fund: string) => {
-        fundInfoService.deleteFund(company, fund).then(() => {
+        fundRecordService.deleteFund(company, fund).then(() => {
             this.updateFunds();
         });
     };
 
     private changeHoldings = (company: string, fund: string, holdings: number) => {
-        fundInfoService.changeHoldings(company, fund, holdings).then(() => {
+        fundRecordService.changeHoldings(company, fund, holdings).then(() => {
             this.updateFunds();
         });
     };
 
     private async updateFunds() {
-        const data = await fundInfoService.getFunds();
+        const data = await fundRecordService.getFunds();
         this.setState({
             funds: data,
         });

@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { IFundInfo } from '../models';
 import { FundPicker } from './FundPicker';
-import { fundInfoService } from '../services';
+import { fundRecordService } from '../services';
 
 export interface IFundViewProps {
     funds: IFundInfo[];
@@ -16,6 +16,6 @@ export class FundView extends React.Component<IFundViewProps> {
     }
 
     private async addFund(company: string, name: string) {
-        await fundInfoService.addFund(company, name);
+        await fundRecordService.addFund(company, name);
     }
 }

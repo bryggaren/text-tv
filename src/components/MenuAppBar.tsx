@@ -81,7 +81,12 @@ export default function MenuAppBar() {
                             </MenuItem>
                             <MenuItem onClick={handleClose}>
                                 <NavLink className={classes.link} to={'/holdings'}>
-                                    Mitt Innehav...
+                                    Innehav...
+                                </NavLink>
+                            </MenuItem>
+                            <MenuItem onClick={handleClose}>
+                                <NavLink className={classes.link} to={'/'}>
+                                    Status...
                                 </NavLink>
                             </MenuItem>
                         </Menu>

@@ -59,7 +59,7 @@ class FundRecordService {
             }
             return 0;
         });
-        console.log(funds);
+
         return funds;
     }
 

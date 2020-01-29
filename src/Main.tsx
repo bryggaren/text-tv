@@ -12,9 +12,9 @@ export class Main extends React.Component<IMainProps> {
     public render() {
         return (
             <Switch>
-                <Route exact path="/" component={Revenue} />
+                <Route exact path="/" render={(props) => <Revenue funds={this.props.funds} />} />
                 <Route path="/funds" render={(props) => <FundView funds={this.props.funds} />} />
-                <Route path="/holdings" render={(props) => <FundTable />} />
+                <Route path="/holdings" component={FundTable} />} />
             </Switch>
         );
     }

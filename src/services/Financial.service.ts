@@ -1,12 +1,35 @@
 import { KeyValueStore } from '../utils';
-import { IFundInfoRecord } from '../models';
+import { IFundInfoRecord, IFundInfo, FundInfoRecord } from '../models';
+import { fundRecordService } from '.';
 
 class FinancialService {
     private fundStore = new KeyValueStore<IFundInfoRecord[]>('fondkollen', 'fundInfo');
-    public async getDailyStatus(): Promise<number> {
-        const fundRecords = await this.fundStore.getItem(new Date().toLocaleDateString('sv-se'));
+    public async getDailyStatus(funds: IFundInfo[]): Promise<number> {
+        const userFunds = await fundRecordService.getFunds();
+        let fundInfoRecords: IFundInfoRecord[] = [];
+        userFunds.map((record) => {
+            const companyItem = funds.find((item) => item.company === record.company);
+            if (companyItem) {
+                record.holdingInfo.map((holding) => {
+                    const fundDetail = companyItem.funds.find(
+                        (fund) => fund.name === holding.fundName,
+                    );
+                    if (fundDetail) {
+                        fundInfoRecords.push(
+                            new FundInfoRecord(companyItem.company, {
+                                ...fundDetail,
+                                holdings: holding.holdings,
+                            }),
+                        );
+                    }
+                });
+            }
+        });
+
+        console.log('Records', fundInfoRecords);
+
         let total: number = 0;
-        fundRecords.map((item) => {
+        fundInfoRecords.map((item) => {
             const percentage = (100 + item.fund.dailyPercentage) / 100;
             const originalValue = item.fund.currentValue / percentage;
             const dailyRevenue = (item.fund.currentValue - originalValue) * item.fund.holdings;

@@ -27,7 +27,7 @@ export class AppLoader extends React.Component<{}, IAppLoaderState> {
             <MemoryRouter>
                 <MenuAppBar />
                 <Container style={{ marginTop: 56 }}>
-                    <Main funds={this.state.allFunds} />
+                    {this.state.allFunds.length > 0 && <Main funds={this.state.allFunds} />}
                 </Container>
             </MemoryRouter>
         );

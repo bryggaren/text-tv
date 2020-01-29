@@ -1,4 +1,5 @@
 import * as React from 'react';
+import * as mockData from '../fonderMock.json';
 class TextTvCommunicator {
     public async getFundPages(): Promise<any> {
         try {
@@ -11,6 +12,12 @@ class TextTvCommunicator {
         } catch (error) {
             throw error;
         }
+    }
+
+    public async getFundPagesMock(): Promise<any> {
+        const jsonData = JSON.stringify(mockData);
+        const fundData = JSON.parse(jsonData);
+        return Promise.resolve(fundData.default);
     }
 }
 

@@ -1,18 +1,18 @@
-import { KeyValueStore, IItems } from '../utils';
+import { KeyValueStore } from '../utils';
 import { textTvCommunicator } from '../communicators';
 import {
     FundInfo,
     IFundInfo,
     IFundDetail,
     FundDetail,
-    IFundInfoRecord,
-    FundInfoRecord,
+    IFundInfoStorageItem,
+    FundInfoStorageItem,
 } from '../models';
 import * as moment from 'moment';
 import { userFundService } from './UserFund.service';
 
 class FundInfoService {
-    private fundStore = new KeyValueStore<IFundInfoRecord[]>('fondkollen', 'fundInfo');
+    private fundStore = new KeyValueStore<IFundInfoStorageItem[]>('fondkollen', 'dailySnapshot');
 
     public async getFundInfo(): Promise<IFundInfo[]> {
         let allFunds: IFundInfo[] = [];
@@ -77,40 +77,51 @@ class FundInfoService {
             return 0;
         });
 
-        this.addFundInfoToStorage(allFunds);
+        // Here we add our daily record
+        this.addFundInfoToStorage(await this.getFundStorageItems(allFunds));
 
         return allFunds;
     }
 
-    private async addFundInfoToStorage(allFunds: IFundInfo[]) {
+    /**
+     * Get only items the user has interest in (shares)
+     */
+    public async getFundStorageItems(allFunds: IFundInfo[]): Promise<IFundInfoStorageItem[]> {
         const userFunds = await userFundService.getFunds();
-        let fundInfoRecords: IFundInfoRecord[] = [];
-        userFunds.map((userFund) => {
+        const fundInfoStorageItems: IFundInfoStorageItem[] = [];
+        userFunds.forEach((userFund) => {
             const companyItem = allFunds.find((item) => item.company === userFund.company);
             if (companyItem) {
                 const fundDetail = companyItem.funds.find((fund) => fund.name === userFund.name);
                 if (fundDetail) {
-                    fundInfoRecords.push(
-                        new FundInfoRecord(companyItem.company, {
-                            ...fundDetail,
-                            shares: userFund.shares,
-                        }),
+                    fundInfoStorageItems.push(
+                        new FundInfoStorageItem(
+                            companyItem.company,
+                            fundDetail.name,
+                            fundDetail.price,
+                            fundDetail.dailyPercentage,
+                            fundDetail.yearlyPercentage,
+                        ),
                     );
                 }
             }
         });
+        return fundInfoStorageItems;
+    }
+
+    private async addFundInfoToStorage(filteredFunds: IFundInfoStorageItem[]) {
         // If after kl 18:30 set next bankday with slutkurser (Current)
         const time = new Date().toLocaleTimeString('sv-se');
-        if (time > '18:30') {
-            await this.fundStore.setItem(
-                new Date('Bankday').toLocaleDateString('sv-se'),
-                fundInfoRecords,
-            );
-        }
+        // if (time > '18:30') {
+        //     await this.fundStore.setItem(
+        //         new Date('Bankday').toLocaleDateString('sv-se'),
+        //         filteredFunds,
+        //     );
+        // }
 
         // Justera kurserna på dagens datum och spara
         const date = new Date().toLocaleDateString('sv-se');
-        await this.fundStore.setItem(new Date().toLocaleDateString('sv-se'), fundInfoRecords);
+        // await this.fundStore.setItem(new Date().toLocaleDateString('sv-se'), filteredFunds);
     }
 
     private addFundInfo(fundInfo: IFundInfo, fundInfos: IFundInfo[]): IFundInfo[] {
@@ -138,7 +149,7 @@ class FundInfoService {
 
     private getFundDetails(elements: Element[]): IFundDetail | null {
         const fundHeading = this.getFundNameAndValue(elements[0]);
-        const fund = new FundDetail(fundHeading.name!, fundHeading.currentValue!);
+        const fund = new FundDetail(fundHeading.name!, fundHeading.price!);
 
         for (let index = elements.length - 1; index > 0; index--) {
             const element = elements[index];
@@ -168,7 +179,7 @@ class FundInfoService {
             const aPos = heading.indexOf('<');
             return {
                 name: heading.slice(0, aPos).trim(),
-                currentValue: Number(value),
+                price: Number(value),
             };
         }
 
@@ -179,7 +190,7 @@ class FundInfoService {
         }
         return {
             name: heading.slice(0, pos + 1).trim(),
-            currentValue: Number(heading.slice(pos + 1, heading.length)),
+            price: Number(heading.slice(pos + 1, heading.length)),
         };
     }
 

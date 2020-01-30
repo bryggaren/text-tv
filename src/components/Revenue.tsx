@@ -15,7 +15,7 @@ export class Revenue extends React.Component<IRevenueProps, IRevenueState> {
     }
 
     public async componentDidMount() {
-        const daily = await financialService.getDailyStatus(this.props.funds);
+        const daily = await financialService.getDailyRevenue(this.props.funds);
         this.setState({ dailyTotal: daily });
     }
 

@@ -19,19 +19,10 @@ export const FundInfoItem: React.FunctionComponent<IFundInfoItemProps> = ({
     fundInfo,
     onAddFund,
 }) => {
-    const [hoveredFund, setHoveredFund] = React.useState('');
     const [open, setOpen] = React.useState(false);
 
     const handleClick = () => {
         setOpen(!open);
-    };
-
-    const updateHoveredFund = (name: string) => {
-        setHoveredFund(name);
-    };
-
-    const resetHoveredFund = () => {
-        setHoveredFund('');
     };
 
     const onAdd = (fundName: string) => {

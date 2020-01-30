@@ -1,12 +1,12 @@
 import React from 'react';
-import { IUserFund } from '../models';
 import { List, ListItem, ListItemText } from '@material-ui/core';
 import { groupBy } from 'lodash-es';
 import { UserFundItem } from './FundHolding/FundHoldingItem';
 import { userFundService } from '../services';
+import { IUserFundStorageItem } from '../models';
 
 export interface IFundTableState {
-    funds: _.Dictionary<IUserFund[]>;
+    funds: _.Dictionary<IUserFundStorageItem[]>;
 }
 
 export class FundTable extends React.Component<{}, IFundTableState> {
@@ -47,7 +47,7 @@ export class FundTable extends React.Component<{}, IFundTableState> {
                                     name={fund.name}
                                     shares={fund.shares}
                                     onDelete={this.deleteFund}
-                                    onSharesChange={this.changeHoldings}
+                                    onSharesChange={this.updateShares}
                                 />
                             ))}
                         </div>
@@ -63,8 +63,8 @@ export class FundTable extends React.Component<{}, IFundTableState> {
         });
     };
 
-    private changeHoldings = (company: string, fund: string, holdings: number) => {
-        userFundService.changeHoldings(company, fund, holdings).then(() => {
+    private updateShares = (company: string, fund: string, shares: number) => {
+        userFundService.updateShares(company, fund, shares).then(() => {
             this.updateFunds();
         });
     };
@@ -76,7 +76,7 @@ export class FundTable extends React.Component<{}, IFundTableState> {
         });
     }
 
-    private getGroupedFunds(funds: IUserFund[]) {
+    private getGroupedFunds(funds: IUserFundStorageItem[]) {
         return groupBy(funds, 'company');
     }
 }

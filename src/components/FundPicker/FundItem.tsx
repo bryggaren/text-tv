@@ -4,7 +4,7 @@ import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
 import LocalAtm from '@material-ui/icons/LocalAtm';
-import { IFundDetail } from '../../models/FundDetails';
+import { IFundDetail } from '../../models';
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({

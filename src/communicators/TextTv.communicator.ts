@@ -1,4 +1,3 @@
-import * as React from 'react';
 import * as mockData from '../fonderMock.json';
 class TextTvCommunicator {
     public async getFundPages(): Promise<any> {

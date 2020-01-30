@@ -13,17 +13,3 @@ export class FundInfo implements IFundInfo {
         this.funds = [];
     }
 }
-
-export interface IFundInfoRecord {
-    company: string;
-    fund: IFundDetail;
-}
-
-export class FundInfoRecord implements IFundInfoRecord {
-    public company: string;
-    public fund: IFundDetail;
-    constructor(company: string, fund: IFundDetail) {
-        this.company = company;
-        this.fund = fund;
-    }
-}

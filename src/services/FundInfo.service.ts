@@ -8,6 +8,7 @@ import {
     IFundInfoRecord,
     FundInfoRecord,
 } from '../models';
+import * as moment from 'moment';
 import { userFundService } from './UserFund.service';
 
 class FundInfoService {
@@ -84,24 +85,20 @@ class FundInfoService {
     private async addFundInfoToStorage(allFunds: IFundInfo[]) {
         const userFunds = await userFundService.getFunds();
         let fundInfoRecords: IFundInfoRecord[] = [];
-        // userFunds.map((record) => {
-        //     const companyItem = allFunds.find((item) => item.company === record.company);
-        //     if (companyItem) {
-        //         record.holdingInfo.map((holding) => {
-        //             const fundDetail = companyItem.funds.find(
-        //                 (fund) => fund.name === holding.fundName,
-        //             );
-        //             if (fundDetail) {
-        //                 fundInfoRecords.push(
-        //                     new FundInfoRecord(companyItem.company, {
-        //                         ...fundDetail,
-        //                         holdings: holding.holdings,
-        //                     }),
-        //                 );
-        //             }
-        //         });
-        //     }
-        // });
+        userFunds.map((userFund) => {
+            const companyItem = allFunds.find((item) => item.company === userFund.company);
+            if (companyItem) {
+                const fundDetail = companyItem.funds.find((fund) => fund.name === userFund.name);
+                if (fundDetail) {
+                    fundInfoRecords.push(
+                        new FundInfoRecord(companyItem.company, {
+                            ...fundDetail,
+                            shares: userFund.shares,
+                        }),
+                    );
+                }
+            }
+        });
         // If after kl 18:30 set next bankday with slutkurser (Current)
         const time = new Date().toLocaleTimeString('sv-se');
         if (time > '18:30') {

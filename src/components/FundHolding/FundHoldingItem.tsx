@@ -2,30 +2,30 @@ import { IUserFund } from '../../models';
 import * as React from 'react';
 import { ListItem, ListItemText, TextField, IconButton } from '@material-ui/core';
 import DeleteIcon from '@material-ui/icons/Delete';
-export interface IFundHoldingProps {
+export interface IUserFundItemProps {
     company: string;
-    fundName: string;
-    holdings: number;
-    onDelete(company: string, fundName: string): void;
-    onHoldingsChange(company: string, fund: string, holdings: number): void;
+    name: string;
+    shares: number;
+    onDelete(company: string, name: string): void;
+    onSharesChange(company: string, name: string, shares: number): void;
 }
 
-interface IFundHoldingState {
-    internalHoldings: number;
+interface IUserFundItemState {
+    shares: number;
 }
 
-export class FundHoldingItem extends React.Component<IFundHoldingProps, IFundHoldingState> {
-    constructor(props: IFundHoldingProps) {
+export class UserFundItem extends React.Component<IUserFundItemProps, IUserFundItemState> {
+    constructor(props: IUserFundItemProps) {
         super(props);
         this.state = {
-            internalHoldings: this.props.holdings,
+            shares: this.props.shares,
         };
     }
 
     public render() {
         return (
             <ListItem button style={{ marginLeft: 4 }}>
-                <ListItemText primary={this.props.fundName} />
+                <ListItemText primary={this.props.name} />
                 <TextField
                     style={{ maxWidth: 80 }}
                     label="Andelar"
@@ -34,12 +34,12 @@ export class FundHoldingItem extends React.Component<IFundHoldingProps, IFundHol
                     InputLabelProps={{
                         shrink: true,
                     }}
-                    value={this.state.internalHoldings}
+                    value={this.state.shares}
                     onChange={(event) => {
                         const { value } = event.target;
-                        this.setState({ internalHoldings: Number(value) });
+                        this.setState({ shares: Number(value) });
                     }}
-                    onBlur={this.onHoldingsBlur}
+                    onBlur={this.onBlur}
                 />
                 <IconButton edge="end" aria-label="delete fund" onClick={this.onDelete}>
                     <DeleteIcon />
@@ -49,14 +49,10 @@ export class FundHoldingItem extends React.Component<IFundHoldingProps, IFundHol
     }
 
     private onDelete = () => {
-        this.props.onDelete(this.props.company, this.props.fundName);
+        this.props.onDelete(this.props.company, this.props.name);
     };
 
-    private onHoldingsBlur = () => {
-        this.props.onHoldingsChange(
-            this.props.company,
-            this.props.fundName,
-            this.state.internalHoldings,
-        );
+    private onBlur = () => {
+        this.props.onSharesChange(this.props.company, this.props.name, this.state.shares);
     };
 }

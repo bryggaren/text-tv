@@ -32,7 +32,7 @@ class FinancialService {
         fundInfoRecords.map((item) => {
             const percentage = (100 + item.fund.dailyPercentage) / 100;
             const originalValue = item.fund.currentValue / percentage;
-            const dailyRevenue = (item.fund.currentValue - originalValue) * item.fund.holdings;
+            const dailyRevenue = (item.fund.currentValue - originalValue) * item.fund.shares;
             total = total + dailyRevenue;
         });
         return total;

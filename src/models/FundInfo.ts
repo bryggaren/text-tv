@@ -1,5 +1,4 @@
 import { IFundDetail } from '.';
-import { IFundRecord } from './IFundRecord';
 
 export interface IFundInfo {
     company: string;

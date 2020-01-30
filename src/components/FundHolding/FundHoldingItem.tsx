@@ -1,4 +1,4 @@
-import { IFundRecord } from '../../models';
+import { IUserFund } from '../../models';
 import * as React from 'react';
 import { ListItem, ListItemText, TextField, IconButton } from '@material-ui/core';
 import DeleteIcon from '@material-ui/icons/Delete';

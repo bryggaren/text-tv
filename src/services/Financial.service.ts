@@ -1,29 +1,29 @@
 import { KeyValueStore } from '../utils';
 import { IFundInfoRecord, IFundInfo, FundInfoRecord } from '../models';
-import { fundRecordService } from '.';
+import { userFundService } from '.';
 
 class FinancialService {
     private fundStore = new KeyValueStore<IFundInfoRecord[]>('fondkollen', 'fundInfo');
     public async getDailyStatus(funds: IFundInfo[]): Promise<number> {
-        const userFunds = await fundRecordService.getFunds();
+        const userFunds = await userFundService.getFunds();
         let fundInfoRecords: IFundInfoRecord[] = [];
         userFunds.map((record) => {
-            const companyItem = funds.find((item) => item.company === record.company);
-            if (companyItem) {
-                record.holdingInfo.map((holding) => {
-                    const fundDetail = companyItem.funds.find(
-                        (fund) => fund.name === holding.fundName,
-                    );
-                    if (fundDetail) {
-                        fundInfoRecords.push(
-                            new FundInfoRecord(companyItem.company, {
-                                ...fundDetail,
-                                holdings: holding.holdings,
-                            }),
-                        );
-                    }
-                });
-            }
+            // const companyItem = funds.find((item) => item.company === record.company);
+            // if (companyItem) {
+            //     record.holdingInfo.map((holding) => {
+            //         const fundDetail = companyItem.funds.find(
+            //             (fund) => fund.name === holding.fundName,
+            //         );
+            //         if (fundDetail) {
+            //             fundInfoRecords.push(
+            //                 new FundInfoRecord(companyItem.company, {
+            //                     ...fundDetail,
+            //                     holdings: holding.holdings,
+            //                 }),
+            //             );
+            //         }
+            //     });
+            // }
         });
 
         console.log('Records', fundInfoRecords);

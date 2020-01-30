@@ -1,17 +1,17 @@
-import { IFundDetail, IFundRecord } from '../models';
+import { IFundDetail, IUserFund, FundInfo, UserFund } from '../models';
 import { KeyValueStore, IItems } from '../utils';
 
 const Company_Fund_Separator = '#/#/#';
-class FundRecordService {
-    private fundStore = new KeyValueStore<number>('fondkollen', 'fundRecords');
-    public async addFund(company: string, name: string): Promise<void> {
+class UserFundService {
+    private fundStore = new KeyValueStore<IUserFund>('fondkollen', 'fundRecords');
+    public async addFund(company: string, name: string, shares: number = 0): Promise<void> {
         const newFundKey = company.concat(Company_Fund_Separator, name);
         const existingFund = (await this.fundStore.getItem(newFundKey)) !== undefined;
 
         if (existingFund) {
             alert('Den här fonden finns redan bland dina fonder!');
         } else {
-            this.fundStore.setItem(newFundKey, 0);
+            this.fundStore.setItem(newFundKey, new UserFund(company, name));
         }
     }
 
@@ -20,56 +20,22 @@ class FundRecordService {
         await this.fundStore.removeItem(key);
     }
 
-    public async changeHoldings(company: string, name: string, holdings: number) {
+    public async changeHoldings(company: string, name: string, shares: number) {
         const key = company.concat(Company_Fund_Separator, name);
         await this.fundStore.removeItem(key);
-        await this.fundStore.setItem(key, holdings);
+        await this.addFund(company, name, shares);
     }
-    public async getFunds(): Promise<IFundRecord[]> {
+    public async getFunds(): Promise<IUserFund[]> {
         const keys = await this.fundStore.getItems();
-        const funds: IFundRecord[] = [];
+        const funds: IUserFund[] = [];
         for (const key in keys) {
-            const fundRecord = this.createFundRecord(key, await this.fundStore.getItem(key));
-            const existingCompany = funds.find((fund) => fund.company === fundRecord.company);
-            if (existingCompany) {
-                existingCompany.holdingInfo.push(fundRecord.holdingInfo[0]);
-                existingCompany.holdingInfo.sort((a, b) => {
-                    const x = a.fundName.toLowerCase();
-                    const y = b.fundName.toLowerCase();
-                    if (x < y) {
-                        return -1;
-                    }
-                    if (x > y) {
-                        return 1;
-                    }
-                    return 0;
-                });
-            } else {
-                funds.push(fundRecord);
-            }
+            funds.push(await this.fundStore.getItem(key));
         }
-        funds.sort((a, b) => {
-            const x = a.company.toLowerCase();
-            const y = b.company.toLowerCase();
-            if (x < y) {
-                return -1;
-            }
-            if (x > y) {
-                return 1;
-            }
-            return 0;
-        });
-
         return funds;
-    }
-
-    private createFundRecord(key: string, value: number): IFundRecord {
-        const info = key.split(Company_Fund_Separator);
-        return { company: info[0], holdingInfo: [{ fundName: info[1], holdings: value }] };
     }
 }
 
-export const fundRecordService = new FundRecordService();
+export const userFundService = new UserFundService();
 
 // public setCustomerInfo(projectId: Id, value: string): Promise<void> {
 //     return this.customerInfoStore.setItem(projectId, value);

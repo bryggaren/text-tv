@@ -1,27 +1,28 @@
 import React from 'react';
-import { IFundRecord } from '../models';
+import { IUserFund } from '../models';
 import { List, ListItem, ListItemText } from '@material-ui/core';
-
-import { fundRecordService } from '../services';
+import { groupBy } from 'lodash-es';
 import { FundHoldingItem } from './FundHolding/FundHoldingItem';
+import { userFundService } from '../services';
 
 export interface IFundTableState {
-    funds: IFundRecord[];
+    funds: _.Dictionary<IUserFund[]>;
 }
 
 export class FundTable extends React.Component<{}, IFundTableState> {
     constructor(props: any) {
         super(props);
         this.state = {
-            funds: [],
+            funds: {},
         };
     }
     public async componentDidMount() {
-        const data = await fundRecordService.getFunds();
-        this.setState({ funds: data });
+        const data = await userFundService.getFunds();
+        this.setState({ funds: this.getGroupedFunds(data) });
     }
 
-    public render() {
+    render() {
+        const { funds } = this.state; // Essentially does: const funds = this.state.funds;
         return (
             <div style={{ display: 'flex', overflow: 'hidden' }}>
                 <List
@@ -34,52 +35,120 @@ export class FundTable extends React.Component<{}, IFundTableState> {
                     component="nav"
                     aria-labelledby="nested-list-subheader"
                 >
-                    {this.state.funds.map((fund) => {
-                        return this.renderHolding(fund);
-                    })}
+                    {Object.keys(funds).map((company) => (
+                        <div key={company}>
+                            <ListItem style={{ color: 'green' }}>
+                                <ListItemText primary={company} />
+                            </ListItem>
+                            {funds[company].map((fund) => (
+                                <FundHoldingItem
+                                    key={fund.name}
+                                    company={company}
+                                    fundName={fund.name}
+                                    holdings={fund.shares}
+                                    onDelete={this.deleteFund}
+                                    onHoldingsChange={this.changeHoldings}
+                                />
+                            ))}
+                        </div>
+                    ))}
                 </List>
             </div>
         );
     }
 
-    private renderHolding(fund: IFundRecord) {
-        return (
-            <div key={fund.company}>
-                <ListItem style={{ color: 'green' }}>
-                    <ListItemText primary={fund.company} />
-                </ListItem>
-                {fund.holdingInfo.map((item) => {
-                    return (
-                        <FundHoldingItem
-                            key={item.fundName}
-                            company={fund.company}
-                            fundName={item.fundName}
-                            holdings={item.holdings || 0}
-                            onDelete={this.deleteFund}
-                            onHoldingsChange={this.changeHoldings}
-                        />
-                    );
-                })}
-            </div>
-        );
+    // public render() {
+    //     return (
+    //         <div style={{ display: 'flex', overflow: 'hidden' }}>
+    //             <List
+    //                 style={{
+    //                     width: '100%',
+    //                     maxWidth: 360,
+    //                     backgroundColor: 'white',
+    //                     overflowY: 'scroll',
+    //                 }}
+    //                 component="nav"
+    //                 aria-labelledby="nested-list-subheader"
+    //             >
+    //                 {Object.keys(this.state.funds).map((key, index) => {
+    //                     <div key={index}>
+    //                         <ListItem style={{ color: 'green' }}>
+    //                             <ListItemText primary={key} />
+    //                         </ListItem>
+    //                     </div>;
+    //                 })}
+    //             </List>
+    //         </div>
+    //     );
+    // }
+
+    private getGroupedFunds(funds: IUserFund[]) {
+        return groupBy(funds, 'company');
     }
 
+    // private renderFunds() {
+    //     for (let company in this.state.funds) {
+    //         let funds = this.state.funds[company];
+    //         {
+    //             // <div key={company}>
+    //             <ListItem style={{ color: 'green' }}>
+    //                 <ListItemText primary={company} />
+    //             </ListItem>;
+    //             {
+    //                 funds.map((fund) => {
+    //                     return (
+    //                         <FundHoldingItem
+    //                             key={fund.name}
+    //                             company={company}
+    //                             fundName={fund.name}
+    //                             holdings={fund.shares}
+    //                             onDelete={this.deleteFund}
+    //                             onHoldingsChange={this.changeHoldings}
+    //                         />
+    //                     );
+    //                 });
+    //             }
+    //             // </div>;
+    //         }
+    //     }
+    // }
+
+    // private renderHolding(fund: IUserFund) {
+    // <div key={fund.company}>
+    //     <ListItem style={{ color: 'green' }}>
+    //         <ListItemText primary={fund.company} />
+    //     </ListItem>
+    //     {fund.holdingInfo.map((item) => {
+    //         return (
+    //             <FundHoldingItem
+    //                 key={item.fundName}
+    //                 company={fund.company}
+    //                 fundName={item.fundName}
+    //                 holdings={item.holdings || 0}
+    //                 onDelete={this.deleteFund}
+    //                 onHoldingsChange={this.changeHoldings}
+    //             />
+    //         );
+    //     })}
+    // </div>
+    // }
+
     private deleteFund = (company: string, fund: string) => {
-        fundRecordService.deleteFund(company, fund).then(() => {
+        userFundService.deleteFund(company, fund).then(() => {
             this.updateFunds();
         });
     };
 
     private changeHoldings = (company: string, fund: string, holdings: number) => {
-        fundRecordService.changeHoldings(company, fund, holdings).then(() => {
+        userFundService.changeHoldings(company, fund, holdings).then(() => {
             this.updateFunds();
         });
     };
 
     private async updateFunds() {
-        const data = await fundRecordService.getFunds();
+        const data = await userFundService.getFunds();
         this.setState({
-            funds: data,
+            funds: this.getGroupedFunds(data),
         });
     }
 }

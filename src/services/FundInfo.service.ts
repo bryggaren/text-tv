@@ -19,6 +19,7 @@ class FundInfoService {
         const document = new Document();
         const topElement: HTMLElement = document.createElement('rootEl');
 
+        // const pages = await textTvCommunicator.getFundPages();
         const pages = await textTvCommunicator.getFundPagesMock();
         const allContent = [];
         for (let index = 0; index < pages.length; index++) {
@@ -37,24 +38,21 @@ class FundInfoService {
             const root = rootElements[index];
 
             let fundInfo = new FundInfo('');
-            for (let j = 0; j < root.childElementCount; j++) {
-                const element = root.children[j];
+            const childNodes = Array.from(root.childNodes);
+            for (let j = 0; j < childNodes.length; j++) {
+                const node = childNodes[j];
+                const element = root.childNodes[j] as Element;
+                // console.log(node);
                 if (element.className === 'G' && element.innerHTML.trim() !== '') {
                     if (fundInfo.funds.length > 0) {
                         allFunds = this.addFundInfo(fundInfo, allFunds);
                     }
                     fundInfo = new FundInfo(element.innerHTML.trim());
                 }
-                if (
-                    fundInfo.company &&
-                    element.className === 'W' &&
-                    element.innerHTML.trim() !== ''
-                ) {
-                    const fundDetail = this.getFundDetails([
-                        root.children[j],
-                        root.children[j + 1],
-                        root.children[j + 2],
-                    ]);
+                if (fundInfo.company && element.className === 'W') {
+                    const maxItems = childNodes.length - j < 20 ? childNodes.length - j : 20;
+                    const nodes = childNodes.slice(j - 1, j + maxItems - 2);
+                    const fundDetail = this.getFundDetails(nodes);
                     if (fundDetail) {
                         fundInfo.funds.push(fundDetail);
                     }
@@ -147,21 +145,47 @@ class FundInfoService {
         return fundInfos;
     }
 
-    private getFundDetails(elements: Element[]): IFundDetail | null {
-        const fundHeading = this.getFundNameAndValue(elements[0]);
-        const fund = new FundDetail(fundHeading.name!, fundHeading.price!);
+    private getFundDetails(nodes: ChildNode[]): IFundDetail | null {
+        if (nodes[0].nodeType !== 3) {
+            return null;
+        }
+        const fundName = String(nodes[0].nodeValue).trim();
+        if (fundName.length < 1) {
+            return null;
+        }
+        const fundValue = this.getFundValue(nodes);
 
-        for (let index = elements.length - 1; index > 0; index--) {
-            const element = elements[index];
-            if (element.className === 'C' || element.className === 'Y') {
-                if (fund.yearlyPercentage) {
-                    fund.dailyPercentage = Number(element.innerHTML.trim());
-                } else {
-                    fund.yearlyPercentage = Number(element.innerHTML.trim());
-                }
+        const fund = new FundDetail(fundName, fundValue);
+
+        console.log('fundDetail', fund);
+
+        // for (let index = nodes.length - 1; index > 0; index--) {
+        //     const element = elements[index];
+        //     if (element.className === 'C' || element.className === 'Y') {
+        //         if (fund.yearlyPercentage) {
+        //             fund.dailyPercentage = Number(element.innerHTML.trim());
+        //         } else {
+        //             fund.yearlyPercentage = Number(element.innerHTML.trim());
+        //         }
+        //     }
+        // }
+        // return fund.yearlyPercentage ? fund : null;
+        return null;
+    }
+
+    private getFundValue(nodes: ChildNode[]): number {
+        let value: number = 0.0;
+        for (let index = 1; index < nodes.length - 1; index++) {
+            const element = nodes[index] as Element;
+            if (element.className !== 'W') {
+                return value;
+            }
+            const elementValue = Number(element.innerHTML.trim());
+            if (!isNaN(elementValue)) {
+                value += Number(elementValue);
             }
         }
-        return fund.yearlyPercentage ? fund : null;
+        return value;
     }
 
     private getFundNameAndValue(element: Element): Partial<IFundDetail> {

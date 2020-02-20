@@ -1,14 +1,8 @@
 import { KeyValueStore, IItems } from '../utils';
 import { textTvCommunicator } from '../communicators';
-import {
-    FundInfo,
-    IFundInfo,
-    IFundDetail,
-    FundDetail,
-    IFundInfoRecord,
-    FundInfoRecord,
-} from '../models';
 import { userFundService } from './UserFund.service';
+import { IFundInfoRecord, IFundInfo, FundInfo } from '../models/FundInfo';
+import { IFundDetail, FundDetail } from '../models/FundDetails';
 
 class FundInfoService {
     private fundStore = new KeyValueStore<IFundInfoRecord[]>('fondkollen', 'fundInfo');
@@ -18,7 +12,8 @@ class FundInfoService {
         const document = new Document();
         const topElement: HTMLElement = document.createElement('rootEl');
 
-        const pages = await textTvCommunicator.getFundPagesMock();
+        const pages = await textTvCommunicator.getFundPages();
+        // const pages = await textTvCommunicator.getFundPagesMock();
         const allContent = [];
         for (let index = 0; index < pages.length; index++) {
             allContent.push(pages[index].content);
@@ -77,6 +72,8 @@ class FundInfoService {
         });
 
         this.addFundInfoToStorage(allFunds);
+
+        console.log(allFunds);
 
         return allFunds;
     }

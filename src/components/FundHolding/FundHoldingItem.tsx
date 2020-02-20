@@ -1,24 +1,23 @@
-import { IUserFund } from '../../models';
 import * as React from 'react';
 import { ListItem, ListItemText, TextField, IconButton } from '@material-ui/core';
 import DeleteIcon from '@material-ui/icons/Delete';
 export interface IFundHoldingProps {
     company: string;
     fundName: string;
-    holdings: number;
+    shares: number;
     onDelete(company: string, fundName: string): void;
-    onHoldingsChange(company: string, fund: string, holdings: number): void;
+    onHoldingsChange(company: string, fund: string, shares: number): void;
 }
 
-interface IFundHoldingState {
-    internalHoldings: number;
+interface IFundSharesState {
+    internalShares: number;
 }
 
-export class FundHoldingItem extends React.Component<IFundHoldingProps, IFundHoldingState> {
+export class FundHoldingItem extends React.Component<IFundHoldingProps, IFundSharesState> {
     constructor(props: IFundHoldingProps) {
         super(props);
         this.state = {
-            internalHoldings: this.props.holdings,
+            internalShares: this.props.shares,
         };
     }
 
@@ -34,10 +33,10 @@ export class FundHoldingItem extends React.Component<IFundHoldingProps, IFundHol
                     InputLabelProps={{
                         shrink: true,
                     }}
-                    value={this.state.internalHoldings}
+                    value={this.state.internalShares}
                     onChange={(event) => {
                         const { value } = event.target;
-                        this.setState({ internalHoldings: Number(value) });
+                        this.setState({ internalShares: Number(value) });
                     }}
                     onBlur={this.onHoldingsBlur}
                 />
@@ -56,7 +55,7 @@ export class FundHoldingItem extends React.Component<IFundHoldingProps, IFundHol
         this.props.onHoldingsChange(
             this.props.company,
             this.props.fundName,
-            this.state.internalHoldings,
+            this.state.internalShares,
         );
     };
 }

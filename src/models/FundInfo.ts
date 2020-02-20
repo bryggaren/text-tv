@@ -1,4 +1,4 @@
-import { IFundDetail } from '.';
+import { IFundDetail } from './FundDetails';
 
 export interface IFundInfo {
     company: string;

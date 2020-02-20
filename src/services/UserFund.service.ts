@@ -1,5 +1,5 @@
-import { IFundDetail, IUserFund, FundInfo, UserFund } from '../models';
 import { KeyValueStore, IItems } from '../utils';
+import { IUserFund, UserFund } from '../models/IUserFund';
 
 const Company_Fund_Separator = '#/#/#';
 class UserFundService {
@@ -11,7 +11,7 @@ class UserFundService {
         if (existingFund) {
             alert('Den här fonden finns redan bland dina fonder!');
         } else {
-            this.fundStore.setItem(newFundKey, new UserFund(company, name));
+            this.fundStore.setItem(newFundKey, new UserFund(company, name, shares));
         }
     }
 

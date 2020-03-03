@@ -12,8 +12,8 @@ class FundInfoService {
         const document = new Document();
         const topElement: HTMLElement = document.createElement('rootEl');
 
-        // const pages = await textTvCommunicator.getFundPages();
         const pages = await textTvCommunicator.getFundPages();
+        // const pages = await textTvCommunicator.getFundPagesMock();
         const allContent = [];
         for (let index = 0; index < pages.length; index++) {
             allContent.push(pages[index].content);

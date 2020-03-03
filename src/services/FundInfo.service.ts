@@ -13,7 +13,7 @@ class FundInfoService {
         const topElement: HTMLElement = document.createElement('rootEl');
 
         // const pages = await textTvCommunicator.getFundPages();
-        const pages = await textTvCommunicator.getFundPagesMock();
+        const pages = await textTvCommunicator.getFundPages();
         const allContent = [];
         for (let index = 0; index < pages.length; index++) {
             allContent.push(pages[index].content);
@@ -26,6 +26,7 @@ class FundInfoService {
         document.appendChild(topElement);
 
         const rootElements = document.getElementsByClassName('root');
+        console.log(rootElements);
 
         for (let index = 0; index < rootElements.length; index++) {
             const root = rootElements[index];

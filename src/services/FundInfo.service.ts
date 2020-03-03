@@ -27,8 +27,6 @@ class FundInfoService {
 
         const rootElements = document.getElementsByClassName('root');
         console.log(rootElements);
-        console.log('test1');
-        console.log('test2');
 
         for (let index = 0; index < rootElements.length; index++) {
             const root = rootElements[index];
